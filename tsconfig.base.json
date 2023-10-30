@@ -1,0 +1,26 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@org/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@org/core-data": ["libs/core-data/src/index.ts"],
+      "@org/core-state": ["libs/core-state/src/index.ts"],
+      "@org/material": ["libs/material/src/index.ts"],
+      "@org/ui-toolbar": ["libs/ui-toolbar/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
