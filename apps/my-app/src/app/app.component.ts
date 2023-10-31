@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   constructor(private todoService: WidgetsService) {
     // console.log(environment.production);
   }
-
+  showDeleteModal = false;
   allTodos!: Todo[];
   isLoading = false;
 
@@ -38,6 +38,21 @@ export class AppComponent implements OnInit {
       this.allTodos = this.allTodos.filter((todo) => todo.id !== todoId);
       this.fetchTodos();
     });
+    this.showDeleteModal = false;
+  }
+  pinTodo(todo: Todo) {
+    todo.pinned = !todo.pinned;
+
+    // Sort the todos array to place pinned items at the top
+    this.allTodos = this.allTodos.sort((a, b) => {
+      if (a.pinned && !b.pinned) {
+        return -1;
+      } else if (!a.pinned && b.pinned) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
   fetchTodos(): void {
     this.todoService.getTodos().subscribe((todos) => {
@@ -52,26 +67,35 @@ export class AppComponent implements OnInit {
         console.log('Todo status updated successfully:', response);
       });
   }
-
+  // editing(todo) {
+  //   todo.editing = false;
+  // }
+  handleUpdatedTodo(updatedTodo: Todo) {
+    // Find the index of the updated todo in the array and replace it
+    const index = this.allTodos.findIndex((todo) => todo.id === updatedTodo.id);
+    if (index !== -1) {
+      this.allTodos[index] = updatedTodo;
+    }
+  }
   // clearCompleted() {
-  //   const completedTodoIds = this.allTodos
-  //     .filter((todo) => todo.complete && todo.id !== undefined)
-  //     .map((todo) => todo.id as number);
-
-  //   completedTodoIds.forEach((todoId) => {
-  //     this.todoService.deleteTodo(todoId).subscribe(() => {
-  //       this.allTodos = this.allTodos.filter((todo) => {
-  //         return todo.id !== todoId;
-  //       });
-  //       this.fetchTodos();
+  //   const completedTodos = this.allTodos.filter((todo) => todo.complete);
+  //   completedTodos.forEach((todo) => {
+  //     this.todoService.deleteTodo(todo.id).subscribe(() => {
+  //       this.allTodos = this.allTodos.filter((t) => t.id !== todo.id);
   //     });
   //   });
   // }
   clearCompleted() {
-    const completedTodos = this.allTodos.filter((todo) => todo.complete);
-    completedTodos.forEach((todo) => {
-      this.todoService.deleteTodo(todo.id).subscribe(() => {
-        this.allTodos = this.allTodos.filter((t) => t.id !== todo.id);
+    const completedTodoIds = this.allTodos
+      .filter((todo) => todo.complete && todo.id !== undefined)
+      .map((todo) => todo.id as number);
+
+    completedTodoIds.forEach((todoId) => {
+      this.todoService.deleteTodo(todoId).subscribe(() => {
+        this.allTodos = this.allTodos.filter((todo) => {
+          return todo.id !== todoId;
+        });
+        this.fetchTodos();
       });
     });
   }

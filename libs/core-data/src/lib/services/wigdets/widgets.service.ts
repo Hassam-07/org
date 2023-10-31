@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment.development';
 })
 export class WidgetsService {
   private apiUrl = environment.apiUrl;
+  model = 'todos';
   constructor(private http: HttpClient) {}
 
   getTodos(): Observable<any[]> {
@@ -21,7 +22,9 @@ export class WidgetsService {
   deleteTodo(todoId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${todoId}`);
   }
-
+  updateTodo(todo: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${todo}`, todo);
+  }
   markAsComplete(todoId: number, status: boolean): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${todoId}`, {
       complete: status,

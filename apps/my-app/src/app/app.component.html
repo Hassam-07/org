@@ -8,7 +8,10 @@
       <org-todo (addTodoItem)="addTodo($event)"></org-todo>
       <org-todo-list
         [todos]="allTodos"
+        (editTodo)="handleUpdatedTodo($event)"
+        [showDeleteModal]="showDeleteModal"
         (deleteTodoItem)="deleteTodo($event)"
+        (pinTodoItem)="pinTodo($event)"
         (markAsComplete)="markCompleted($event)"
         (clearcompletedItems)="clearCompleted()"
       ></org-todo-list>
