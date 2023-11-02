@@ -1,14 +1,14 @@
 .todo {
-  width: 600px;
+  width: 550px;
   max-height: 498px;
 
   form {
     width: 100%;
-    height: 83px;
+    // height: 83px;
     position: relative;
 
     input {
-      width: 95%;
+      width: 90%;
       padding: 15px 30px;
       border-radius: 5px;
       margin-top: 2rem;
@@ -27,7 +27,7 @@
 
     .pos-abs {
       position: absolute;
-      right: 0px;
+      right: 10px;
       top: 57%;
     }
 

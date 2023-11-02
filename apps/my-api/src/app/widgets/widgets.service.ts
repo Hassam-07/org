@@ -13,16 +13,19 @@ export class WidgetsService {
       id: 1,
       name: 'first',
       complete: false,
+      pinned:false,
     },
     {
       id: 2,
       name: 'Second',
       complete: false,
+      pinned:false,
     },
     {
       id: 3,
       name: 'third',
       complete: false,
+      pinned:false,
     },
   ];
   create(createTodoDto: CreateWidgetDto) {

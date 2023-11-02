@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 // import { environment } from '../../../../libs/core-data/src/lib/environments/environment';
 import { Widget } from '@org/api-interfaces';
 import { Todo } from '../app/models/Todo';
-import { WidgetsService } from '@org/core-data';
+import { WidgetsService } from '../app/wigdets/widgets.service';
+import { TodoDataService } from './todo-data.service';
 
 @Component({
   selector: 'org-root',
@@ -10,20 +11,29 @@ import { WidgetsService } from '@org/core-data';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private todoService: WidgetsService) {
+  constructor(
+    private todoService: WidgetsService,
+    private todoDataService: TodoDataService
+  ) {
     // console.log(environment.production);
   }
   showDeleteModal = false;
-  allTodos!: Todo[];
+  selectedTodo: Todo | null = null;
+  allTodos: Todo[] = [];
   isLoading = false;
+  errorMessage = '';
 
   ngOnInit(): void {
-    console.log('warda', this.fetchTodos());
-    this.todoService.getTodos().subscribe((todos) => {
-      this.allTodos = todos;
-    });
+    this.todoService.getTodos().subscribe(
+      (todos) => {
+        this.allTodos = todos;
+        console.log('hassam', todos);
+      },
+      (error) => {
+        this.handleFetchTodosError(error);
+      }
+    );
   }
-  // constructor() {}
 
   addTodo(newTodo: any) {
     console.log('parent', newTodo);
@@ -39,6 +49,9 @@ export class AppComponent implements OnInit {
       this.fetchTodos();
     });
     this.showDeleteModal = false;
+  }
+  editTodo(todo: Todo) {
+    this.selectedTodo = todo;
   }
   pinTodo(todo: Todo) {
     todo.pinned = !todo.pinned;
@@ -59,6 +72,10 @@ export class AppComponent implements OnInit {
       this.allTodos = todos;
     });
   }
+  handleFetchTodosError(error: any) {
+    this.errorMessage = 'Failed to fetch todos. Please try again later.';
+    console.log(this.errorMessage);
+  }
   markCompleted(todo: Todo) {
     todo.complete = !todo.complete;
     this.todoService
@@ -67,6 +84,13 @@ export class AppComponent implements OnInit {
         console.log('Todo status updated successfully:', response);
       });
   }
+  // markCompleted(todo: Todo) {
+  //   if (todo.id !== undefined) {
+  //     this.todoService.markAsComplete(todo.id, !todo.complete).subscribe(() => {
+  //       todo.complete = !todo.complete;
+  //     });
+  //   }
+  // }
   // editing(todo) {
   //   todo.editing = false;
   // }

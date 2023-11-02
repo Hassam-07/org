@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Todo } from '../models/Todo';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { WidgetsService } from '@org/core-data';
+import { WidgetsService } from '../wigdets/widgets.service';
 
 @Component({
   selector: 'org-todo',

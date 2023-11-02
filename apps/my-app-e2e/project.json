@@ -26,6 +26,35 @@
       "options": {
         "lintFilePatterns": ["apps/my-app-e2e/**/*.{js,ts}"]
       }
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "apps/my-app-e2e/.storybook",
+        "browserTarget": "my-app-e2e:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/my-app-e2e",
+        "configDir": "apps/my-app-e2e/.storybook",
+        "browserTarget": "my-app-e2e:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
     }
   },
   "tags": [],

@@ -1,68 +1,53 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Todo } from '../models/Todo';
-import { WidgetsService } from '@org/core-data';
+import { WidgetsService } from '../wigdets/widgets.service';
+import { TodoDataService } from '../todo-data.service';
 
 @Component({
   selector: 'org-todo-list',
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.scss'],
 })
-export class TodoListComponent implements OnInit {
+export class TodoListComponent implements OnInit, OnChanges {
   @Input() todos: Todo[] = [];
   @Input() showDeleteModal!: boolean;
+  @Input() selectedTodo: Todo | null = null;
   @Output() deleteTodoItem = new EventEmitter<number>();
-  @Output() editTodo = new EventEmitter();
+  @Output() editTodoItem = new EventEmitter();
   @Output() pinTodoItem = new EventEmitter();
   @Output() markAsComplete = new EventEmitter<Todo>();
   @Output() clearcompletedItems = new EventEmitter<any>();
   todoIdToBeDeleted!: number | undefined;
+  @Input() errorMessage = '';
 
-  isLoading = false;
+  @Input() isLoading = true;
   pinnedTodos: Todo[] = [];
   unpinnedTodos: Todo[] = [];
   filter: 'all' | 'active' | 'completed' = 'all';
-  constructor(private todoService: WidgetsService) {}
+  constructor(
+    private todoService: WidgetsService,
+    private todoDataService: TodoDataService
+  ) {}
 
+  // ngOnInit(): void {
+  //   this.fetchTodos();
+  // }
   ngOnInit(): void {
-    console.log('child todos', this.todos);
-    this.fetchTodos();
+    this.isLoading = true;
   }
-
-  fetchTodos() {
-    const existingPinnedTodoIds = this.pinnedTodos
-      ? this.pinnedTodos.map((todo) => todo.id)
-      : [];
-    this.todoService.getTodos().subscribe((response) => {
-      this.todos = response.map((todo) => ({
-        ...todo,
-        isLoading: true,
-        pinned: existingPinnedTodoIds.includes(todo.id) ? true : false,
-        editing: false,
-        name: todo.name,
-      }));
-      this.isLoading = true;
-
-      setTimeout(() => {
-        this.todos.forEach((todo) => (todo.isLoading = false));
-        this.isLoading = false; // Set isLoading to false once data is loaded
-        // this.pinnedTodos = this.todos.filter((todo) => todo.pinned);
-        this.unpinnedTodos = this.todos.filter((todo) => todo.pinned);
-      }, 2000);
-    });
+  ngOnChanges() {
+    if ((this.todos && this.todos.length > 0) || this.todos.length === 0) {
+      this.isLoading = false;
+    }
   }
-  startEditing(todo: Todo) {
-    todo.editing = true;
-  }
-
-  save(todo: Todo) {
-    todo.editing = false;
-  }
-  update(todo: Todo) {
-    todo.editing = false;
-    this.editTodo.emit(todo);
-  }
-
   openDeleteQuestionConfirmationDialog(todoId: number) {
     this.todoIdToBeDeleted = todoId;
     this.showDeleteModal = true;
@@ -81,6 +66,9 @@ export class TodoListComponent implements OnInit {
 
   markCompleted(todo: Todo) {
     this.markAsComplete.emit(todo);
+  }
+  editTodo(todo: any) {
+    this.todoDataService.setTodo(todo);
   }
 
   clearCompleted() {

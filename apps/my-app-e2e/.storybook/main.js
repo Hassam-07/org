@@ -5,8 +5,6 @@ const config = {
     name: '@storybook/angular',
     options: {},
   },
-  // staticDirs: ['../../assets/images'],
-  staticDirs: [{ from: '../src/assets', to: '/assets' }],
 };
 
 export default config;
