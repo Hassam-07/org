@@ -8,6 +8,7 @@
       <org-todo (addTodoItem)="addTodo($event)"></org-todo>
       <org-todo-list
         [todos]="allTodos"
+        [todos]="allTodos$ | async"
         (editTodoItem)="handleUpdatedTodo($event)"
         [showDeleteModal]="showDeleteModal"
         (deleteTodoItem)="deleteTodo($event)"

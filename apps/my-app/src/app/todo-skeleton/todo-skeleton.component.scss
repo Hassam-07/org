@@ -1,8 +1,8 @@
 .box {
   position: absolute;
-  top: 50%;
-  left: 30%;
-  max-width: 400px;
+  top: 52%;
+  left: 20%;
+  max-width: 476px;
   width: 100%;
   padding: 0 15px;
 }
@@ -18,7 +18,7 @@
 }
 
 .skeleton .line {
-  height: 12px;
+  height: 18px;
   margin-bottom: 6px;
   border-radius: 2px;
   background: rgba(130, 130, 130, 0.2);
@@ -37,7 +37,7 @@
     rgba(130, 130, 130, 0.3) 33%
   );
   background-size: 800px 100px;
-  animation: wave-lines 2s infinite ease-out;
+  animation: wave-lines 5s infinite ease-out;
 }
 
 .skeleton-right {
@@ -57,12 +57,12 @@
   flex: 2;
 }
 
-.w40 {
-  width: 40% !important;
+.w80 {
+  width: 80% !important;
 }
 
-.w50 {
-  width: 50% !important;
+.w60 {
+  width: 60% !important;
 }
 
 .w75 {

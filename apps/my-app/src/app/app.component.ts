@@ -4,6 +4,7 @@ import { Widget } from '@org/api-interfaces';
 import { Todo } from '../app/models/Todo';
 import { WidgetsService } from '../app/wigdets/widgets.service';
 import { TodoDataService } from './todo-data.service';
+import { Observable, catchError, startWith } from 'rxjs';
 
 @Component({
   selector: 'org-root',
@@ -18,20 +19,29 @@ export class AppComponent implements OnInit {
     // console.log(environment.production);
   }
   showDeleteModal = false;
+  showLoader = true;
   selectedTodo: Todo | null = null;
   allTodos: Todo[] = [];
-  isLoading = false;
+  // isLoading = false;
   errorMessage = '';
+  allTodos$: Observable<Todo[]>;
 
   ngOnInit(): void {
-    this.todoService.getTodos().subscribe(
-      (todos) => {
-        this.allTodos = todos;
-        console.log('hassam', todos);
-      },
-      (error) => {
+    // this.todoService.getTodos().subscribe(
+    //   (todos) => {
+    //     this.allTodos = todos;
+    //     console.log('hassam', todos);
+    //   },
+    //   (error) => {
+    //     this.handleFetchTodosError(error);
+    //   }
+    // );
+    this.allTodos$ = this.todoService.getTodos().pipe(
+      catchError((error) => {
         this.handleFetchTodosError(error);
-      }
+        return [];
+      }),
+      startWith([])
     );
   }
 
@@ -101,26 +111,25 @@ export class AppComponent implements OnInit {
       this.allTodos[index] = updatedTodo;
     }
   }
-  // clearCompleted() {
-  //   const completedTodos = this.allTodos.filter((todo) => todo.complete);
-  //   completedTodos.forEach((todo) => {
-  //     this.todoService.deleteTodo(todo.id).subscribe(() => {
-  //       this.allTodos = this.allTodos.filter((t) => t.id !== todo.id);
-  //     });
-  //   });
-  // }
   clearCompleted() {
-    const completedTodoIds = this.allTodos
-      .filter((todo) => todo.complete && todo.id !== undefined)
-      .map((todo) => todo.id as number);
-
-    completedTodoIds.forEach((todoId) => {
-      this.todoService.deleteTodo(todoId).subscribe(() => {
-        this.allTodos = this.allTodos.filter((todo) => {
-          return todo.id !== todoId;
-        });
-        this.fetchTodos();
+    const completedTodos = this.allTodos.filter((todo) => todo.complete);
+    completedTodos.forEach((todo) => {
+      this.todoService.deleteTodo(todo.id).subscribe(() => {
+        this.allTodos = this.allTodos.filter((t) => t.id !== todo.id);
       });
     });
   }
+  // clearCompleted() {
+  //   const completedTodoIds = this.allTodos
+  //     .filter((todo) => todo.complete && todo.id !== undefined)
+  //     .map((todo) => todo.id as number);
+  //   completedTodoIds.forEach((todoId) => {
+  //     this.todoService.deleteTodo(todoId).subscribe(() => {
+  //       this.allTodos = this.allTodos.filter((todo) => {
+  //         return todo.id !== todoId;
+  //       });
+  //       this.fetchTodos();
+  //     });
+  //   });
+  // }
 }

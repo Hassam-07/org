@@ -1,8 +1,13 @@
 .list {
+  // width: 100%;
+  // max-height: 330px;
+  // margin-top: 2rem;
+  // overflow-y: scroll;
   width: 100%;
-  max-height: 330px;
   margin-top: 2rem;
-  overflow-y: scroll;
+  min-height: 30px;
+  max-height: 330px;
+  overflow-y: auto;
   &::-webkit-scrollbar {
     width: 5px;
     background-color: #ccc;
@@ -16,6 +21,7 @@
     width: 100%;
     background-color: hsl(235, 24%, 19%);
     border-radius: 5px;
+    min-height: 200px;
 
     .todo-li {
       display: grid;

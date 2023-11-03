@@ -1,5 +1,6 @@
 import {
   applicationConfig,
+  moduleMetadata,
   type Meta,
   type StoryObj,
 } from '@storybook/angular';
@@ -7,12 +8,14 @@ import { TodoListComponent } from './todo-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
 import { Todo } from '@org/api-interfaces';
+import { TodoSkeletonComponent } from '../todo-skeleton/todo-skeleton.component';
 
 const meta: Meta<TodoListComponent> = {
   component: TodoListComponent,
   title: 'TodoListComponent',
   decorators: [
     applicationConfig({ providers: [importProvidersFrom(HttpClientModule)] }),
+    moduleMetadata({ declarations: [TodoSkeletonComponent] }),
   ],
 };
 export default meta;
@@ -454,11 +457,13 @@ export const Default: Story = {
         pinned: false,
       },
     ],
+    showLoader: true,
   },
 };
 export const EmptyState: Story = {
   args: {
     todos: [],
+    showLoader: true,
   },
 };
 export const lessTodos: Story = {
@@ -477,6 +482,7 @@ export const lessTodos: Story = {
         pinned: false,
       },
     ],
+    showLoader: true,
   },
 };
 export const completed: Story = {
@@ -495,6 +501,27 @@ export const completed: Story = {
         pinned: false,
       },
     ],
+    showLoader: true,
+  },
+};
+
+export const loading: Story = {
+  args: {
+    todos: [
+      {
+        id: 1,
+        name: 'task 1',
+        complete: false,
+        pinned: false,
+      },
+      {
+        id: 1,
+        name: 'task 1',
+        complete: false,
+        pinned: false,
+      },
+    ],
+    showLoader: false,
   },
 };
 
@@ -514,5 +541,6 @@ export const pinned: Story = {
         pinned: true,
       },
     ],
+    showLoader: true,
   },
 };

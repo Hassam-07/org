@@ -13,25 +13,26 @@ export class WidgetsService {
       id: 1,
       name: 'first',
       complete: false,
-      pinned:false,
+      pinned: false,
     },
     {
       id: 2,
       name: 'Second',
       complete: false,
-      pinned:false,
+      pinned: false,
     },
     {
       id: 3,
       name: 'third',
       complete: false,
-      pinned:false,
+      pinned: false,
     },
   ];
   create(createTodoDto: CreateWidgetDto) {
     const newTodo: Todo = {
       id: this.todos.length + 1,
       complete: false,
+      pinned: false,
       ...createTodoDto,
     };
 
@@ -48,13 +49,26 @@ export class WidgetsService {
   }
 
   update(id: number, updateTodoDto: UpdateWidgetDto) {
-    return `This action updates a todo`;
+    const index = this.todos.findIndex((todo) => todo.id === id);
+    if (index === -1) {
+      console.log(`Todo with ID ${id} not found`);
+    }
+
+    this.todos[index] = {
+      ...this.todos[index],
+      ...updateTodoDto,
+    };
+
+    return this.todos[index];
   }
 
   remove(id: number) {
     const index = this.todos.findIndex((todo) => todo.id === id);
     if (index !== -1) {
       this.todos.splice(index, 1);
+      this.todos.forEach((todo, index) => {
+        todo.id = index + 1;
+      });
     }
   }
 }

@@ -17,7 +17,7 @@ import { TodoDataService } from '../todo-data.service';
   styleUrls: ['./todo-list.component.scss'],
 })
 export class TodoListComponent implements OnInit, OnChanges {
-  @Input() todos: Todo[] = [];
+  @Input() todos: Todo[];
   @Input() showDeleteModal!: boolean;
   @Input() selectedTodo: Todo | null = null;
   @Output() deleteTodoItem = new EventEmitter<number>();
@@ -28,7 +28,7 @@ export class TodoListComponent implements OnInit, OnChanges {
   todoIdToBeDeleted!: number | undefined;
   @Input() errorMessage = '';
 
-  @Input() isLoading = true;
+  @Input() showLoader = true;
   pinnedTodos: Todo[] = [];
   unpinnedTodos: Todo[] = [];
   filter: 'all' | 'active' | 'completed' = 'all';
@@ -41,11 +41,11 @@ export class TodoListComponent implements OnInit, OnChanges {
   //   this.fetchTodos();
   // }
   ngOnInit(): void {
-    this.isLoading = true;
+    this.showLoader = true;
   }
   ngOnChanges() {
     if ((this.todos && this.todos.length > 0) || this.todos.length === 0) {
-      this.isLoading = false;
+      this.showLoader = false;
     }
   }
   openDeleteQuestionConfirmationDialog(todoId: number) {
@@ -75,7 +75,7 @@ export class TodoListComponent implements OnInit, OnChanges {
     this.clearcompletedItems.emit();
   }
 
-  getFilteredTodos(): any[] {
+  getFilteredTodos(): Todo[] {
     if (this.filter === 'active') {
       return this.todos.filter((todo) => !todo.complete);
     } else if (this.filter === 'completed') {
