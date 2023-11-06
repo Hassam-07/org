@@ -460,6 +460,25 @@ export const Default: Story = {
     showLoader: true,
   },
 };
+export const loading: Story = {
+  args: {
+    todos: [
+      {
+        id: 1,
+        name: 'task 1',
+        complete: false,
+        pinned: false,
+      },
+      {
+        id: 1,
+        name: 'task 1',
+        complete: false,
+        pinned: false,
+      },
+    ],
+    showLoader: false,
+  },
+};
 export const EmptyState: Story = {
   args: {
     todos: [],
@@ -502,26 +521,6 @@ export const completed: Story = {
       },
     ],
     showLoader: true,
-  },
-};
-
-export const loading: Story = {
-  args: {
-    todos: [
-      {
-        id: 1,
-        name: 'task 1',
-        complete: false,
-        pinned: false,
-      },
-      {
-        id: 1,
-        name: 'task 1',
-        complete: false,
-        pinned: false,
-      },
-    ],
-    showLoader: false,
   },
 };
 
