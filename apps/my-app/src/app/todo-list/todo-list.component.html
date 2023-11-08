@@ -37,7 +37,17 @@
               [class.fa-solid]="todo.pinned"
             ></i>
           </button>
-
+          <div *ngIf="todo.editing">
+            <input type="text" [(ngModel)]="todo.name" (blur)="update(todo)" />
+            <button class="edit" (click)="save(todo)">
+              <img
+                src="./../../../assets/images/save.png"
+                width="30px"
+                height="20px"
+                alt=""
+              />
+            </button>
+          </div>
           <ng-container>
             <div
               *ngIf="showDeleteModal"

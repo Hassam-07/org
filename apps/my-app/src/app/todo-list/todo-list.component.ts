@@ -9,7 +9,6 @@ import {
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Todo } from '../models/Todo';
 import { WidgetsService } from '../wigdets/widgets.service';
-import { TodoDataService } from '../todo-data.service';
 
 @Component({
   selector: 'org-todo-list',
@@ -32,10 +31,7 @@ export class TodoListComponent implements OnInit, OnChanges {
   pinnedTodos: Todo[] = [];
   unpinnedTodos: Todo[] = [];
   filter: 'all' | 'active' | 'completed' = 'all';
-  constructor(
-    private todoService: WidgetsService,
-    private todoDataService: TodoDataService
-  ) {}
+  constructor(private todoService: WidgetsService) {}
 
   // ngOnInit(): void {
   //   this.fetchTodos();
@@ -53,6 +49,10 @@ export class TodoListComponent implements OnInit, OnChanges {
     this.showDeleteModal = true;
   }
 
+  startEditing(todo: Todo) {
+    todo.editing = true;
+  }
+
   closeDeleteQuestionConfirmationDialog() {
     this.todoIdToBeDeleted = undefined;
     this.showDeleteModal = false;
@@ -68,7 +68,14 @@ export class TodoListComponent implements OnInit, OnChanges {
     this.markAsComplete.emit(todo);
   }
   editTodo(todo: any) {
-    this.todoDataService.setTodo(todo);
+    todo.editing = true;
+  }
+  save(todo: Todo) {
+    todo.editing = false;
+  }
+  update(todo: Todo) {
+    todo.editing = false;
+    this.editTodoItem.emit(todo);
   }
 
   clearCompleted() {

@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Widget } from '@org/api-interfaces';
 import { Todo } from '../app/models/Todo';
 import { WidgetsService } from '../app/wigdets/widgets.service';
-import { TodoDataService } from './todo-data.service';
 import { Observable, catchError, startWith } from 'rxjs';
 
 @Component({
@@ -12,10 +11,7 @@ import { Observable, catchError, startWith } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(
-    private todoService: WidgetsService,
-    private todoDataService: TodoDataService
-  ) {
+  constructor(private todoService: WidgetsService) {
     // console.log(environment.production);
   }
   showDeleteModal = false;
@@ -60,9 +56,6 @@ export class AppComponent implements OnInit {
     });
     this.showDeleteModal = false;
   }
-  editTodo(todo: Todo) {
-    this.selectedTodo = todo;
-  }
   pinTodo(todo: Todo) {
     todo.pinned = !todo.pinned;
 
@@ -105,12 +98,25 @@ export class AppComponent implements OnInit {
   //   todo.editing = false;
   // }
   handleUpdatedTodo(updatedTodo: Todo) {
-    // Find the index of the updated todo in the array and replace it
-    const index = this.allTodos.findIndex((todo) => todo.id === updatedTodo.id);
-    if (index !== -1) {
-      this.allTodos[index] = updatedTodo;
-    }
+    this.todoService
+      .updateTodo(updatedTodo.id, updatedTodo)
+      .subscribe((response) => {
+        const index = this.allTodos.findIndex(
+          (todo) => todo.id === updatedTodo.id
+        );
+        if (index !== -1) {
+          this.allTodos[index] = response;
+        }
+      });
   }
+
+  // handleUpdatedTodo(updatedTodo: Todo) {
+  //   // Find the index of the updated todo in the array and replace it
+  //   const index = this.allTodos.findIndex((todo) => todo.id === updatedTodo.id);
+  //   if (index !== -1) {
+  //     this.allTodos[index] = updatedTodo;
+  //   }
+  // }
   clearCompleted() {
     const completedTodos = this.allTodos.filter((todo) => todo.complete);
     completedTodos.forEach((todo) => {
